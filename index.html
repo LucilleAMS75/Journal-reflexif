@@ -1,0 +1,1954 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mon Livret Réflexif CCE - Exercer la mission de formateur en entreprise</title>
+  <meta name="description" content="Livret numérique réflexif pour les candidats à la certification CCE - Exercer la mission de formateur en entreprise." />
+  
+  <!-- Police Fira Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,500&display=swap" rel="stylesheet">
+  
+  <!-- Bibliothèque docx pour export Word autonome -->
+  <script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.js"></script>
+
+  <style>
+    :root {
+      --primary: #810464;
+      --primary-hover: #6b0353;
+      --primary-light: #F3E6F0;
+      --primary-border: rgba(129, 4, 100, 0.15);
+      --bg: #F9F9FB;
+      --card-bg: #FFFFFF;
+      --text: #1A1A2E;
+      --text-muted: #6B7280;
+      --text-subtle: #9CA3AF;
+      --border: #E5E7EB;
+      --success: #22C55E;
+      --success-light: #DCFCE7;
+      --warning: #F59E0B;
+      --sidebar-width: 280px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      font-family: 'Fira Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Layout structure */
+    .app-layout {
+      min-height: 100vh;
+      display: flex;
+    }
+
+    /* Mobile backdrop */
+    .sidebar-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      z-index: 40;
+      backdrop-filter: blur(2px);
+      transition: opacity 0.2s ease;
+    }
+
+    .sidebar-backdrop.active {
+      display: block;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: var(--sidebar-width);
+      background-color: #FFFFFF;
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      z-index: 50;
+      transition: transform 0.25s ease;
+    }
+
+    @media (max-width: 1023px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+      .sidebar.open {
+        transform: translateX(0);
+      }
+    }
+
+    .sidebar-header {
+      padding: 24px;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+    }
+
+    .sidebar-header .app-badge {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-top: 10px;
+    }
+
+    .sidebar-nav {
+      padding: 12px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .nav-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: 6px;
+      border: none;
+      background: transparent;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 500;
+      color: #4B5563;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.15s ease;
+    }
+
+    .nav-btn:hover {
+      background-color: #F3F4F6;
+      color: var(--text);
+    }
+
+    .nav-btn.active {
+      background-color: var(--primary-light);
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .module-item {
+      margin-top: 18px;
+    }
+
+    .module-title-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 12px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+    }
+
+    .module-title-bar .count-badge {
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: normal;
+    }
+
+    .activity-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border-radius: 6px;
+      border: none;
+      background: transparent;
+      font-family: inherit;
+      font-size: 13px;
+      color: #4B5563;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.15s ease;
+      margin-top: 2px;
+    }
+
+    .activity-btn:hover {
+      background-color: #F3F4F6;
+      color: var(--text);
+    }
+
+    .activity-btn.active {
+      background-color: var(--primary-light);
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .status-icon {
+      flex-shrink: 0;
+      width: 15px;
+      height: 15px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .status-dot-pending {
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      border: 1.5px solid #D1D5DB;
+    }
+
+    .sidebar-footer {
+      padding: 16px 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    .final-action-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      border-radius: 6px;
+      border: none;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .final-action-btn.active {
+      background-color: var(--primary);
+      color: #FFFFFF;
+      box-shadow: 0 2px 4px rgba(129, 4, 100, 0.2);
+    }
+
+    .final-action-btn:not(.active) {
+      background-color: #FFFFFF;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .final-action-btn:not(.active):hover {
+      background-color: #F9F9FB;
+      border-color: #D1D5DB;
+    }
+
+    /* Main Content Area */
+    .main-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      margin-left: 0;
+    }
+
+    @media (min-width: 1024px) {
+      .main-wrapper {
+        margin-left: var(--sidebar-width);
+      }
+    }
+
+    /* Top Navbar */
+    .top-navbar {
+      height: 64px;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+    }
+
+    @media (min-width: 768px) {
+      .top-navbar {
+        padding: 0 32px;
+      }
+    }
+
+    .navbar-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .menu-toggle-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: white;
+      color: #4B5563;
+      cursor: pointer;
+    }
+
+    @media (min-width: 1024px) {
+      .menu-toggle-btn {
+        display: none;
+      }
+    }
+
+    .breadcrumbs {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .breadcrumbs a, .breadcrumbs button {
+      color: var(--text-muted);
+      text-decoration: none;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: inherit;
+    }
+
+    .breadcrumbs a:hover, .breadcrumbs button:hover {
+      color: var(--primary);
+    }
+
+    .breadcrumbs .separator {
+      color: #D1D5DB;
+    }
+
+    .breadcrumbs .current {
+      color: var(--text);
+      font-weight: 700;
+      max-width: 220px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    @media (max-width: 640px) {
+      .breadcrumbs .current {
+        max-width: 130px;
+      }
+    }
+
+    .navbar-right {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    /* Bouton plein écran */
+    .fullscreen-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 13px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: #FFFFFF;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .fullscreen-btn:hover {
+      background: #F3F4F6;
+      border-color: #D1D5DB;
+      color: var(--primary);
+    }
+
+    .fullscreen-btn svg {
+      width: 16px;
+      height: 16px;
+      stroke-width: 2.2;
+    }
+
+    .progress-pill-wrapper {
+      display: none;
+      align-items: center;
+      gap: 8px;
+    }
+
+    @media (min-width: 768px) {
+      .progress-pill-wrapper {
+        display: flex;
+      }
+    }
+
+    .progress-track {
+      width: 120px;
+      height: 6px;
+      background: #E5E7EB;
+      border-radius: 9999px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--primary);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .progress-text {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Page container */
+    .page-container {
+      flex: 1;
+      padding: 24px 16px;
+      max-width: 980px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 768px) {
+      .page-container {
+        padding: 36px 32px;
+      }
+    }
+
+    /* CCI Logo Component */
+    .cci-logo-badge {
+      display: inline-flex;
+      align-items: center;
+      background-color: #2A41E8;
+      border-radius: 9999px;
+      padding: 8px 18px;
+      gap: 12px;
+      height: 52px;
+      color: white;
+      box-shadow: 0 2px 6px rgba(42, 65, 232, 0.25);
+    }
+
+    .cci-logo-icon {
+      position: relative;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .cci-logo-icon .ring-outer {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 2.5px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .cci-logo-icon .ring-accent {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 2.5px solid #FFFFFF;
+      border-right-color: transparent;
+      border-bottom-color: transparent;
+      transform: rotate(-45deg);
+    }
+
+    .cci-logo-icon .ring-inner {
+      position: absolute;
+      inset: 5px;
+      border-radius: 50%;
+      border: 2.5px solid rgba(255, 255, 255, 0.6);
+    }
+
+    .cci-logo-icon .center-dot {
+      width: 5px;
+      height: 5px;
+      background: white;
+      border-radius: 50%;
+      position: absolute;
+    }
+
+    .cci-logo-text {
+      display: flex;
+      flex-direction: column;
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      line-height: 1.15;
+    }
+
+    /* Home Page */
+    .home-header {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 36px;
+    }
+
+    .home-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+
+    @media (min-width: 768px) {
+      .home-title {
+        font-size: 38px;
+      }
+    }
+
+    .home-subtitle {
+      font-size: 17px;
+      color: var(--text-muted);
+      font-weight: 500;
+      max-width: 650px;
+    }
+
+    .home-divider {
+      width: 70px;
+      height: 4px;
+      background: var(--primary);
+      border-radius: 9999px;
+      margin: 8px 0;
+    }
+
+    .btn-export-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 14px 28px;
+      background: var(--primary);
+      color: #FFFFFF;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 3px 8px rgba(129, 4, 100, 0.25);
+      transition: all 0.2s ease;
+    }
+
+    .btn-export-primary:hover {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 14px rgba(129, 4, 100, 0.3);
+    }
+
+    .btn-export-primary:active {
+      transform: translateY(0);
+    }
+
+    .home-intro-text {
+      font-size: 14px;
+      color: #4B5563;
+      max-width: 600px;
+      line-height: 1.6;
+      margin-top: 6px;
+    }
+
+    /* Encadré Réflexivité */
+    .reflexivity-box {
+      background: #FFFFFF;
+      border-radius: 8px;
+      border-left: 4px solid var(--primary);
+      padding: 28px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+      margin-bottom: 36px;
+    }
+
+    .reflexivity-box h2 {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 14px;
+    }
+
+    .reflexivity-box p {
+      font-size: 14px;
+      color: #4B5563;
+      line-height: 1.65;
+      margin-bottom: 12px;
+      text-align: justify;
+    }
+
+    .reflexivity-box p:last-child {
+      margin-bottom: 0;
+      font-style: italic;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    /* Module Cards Grid */
+    .modules-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 18px;
+    }
+
+    @media (min-width: 640px) {
+      .modules-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .modules-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .module-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      cursor: pointer;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      transition: all 0.2s ease;
+    }
+
+    .module-card:hover {
+      border-color: #D1D5DB;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.06);
+    }
+
+    .module-card:hover .module-card-title {
+      color: var(--primary);
+    }
+
+    .module-card:hover .arrow-circle {
+      background: var(--primary);
+      color: white;
+    }
+
+    .module-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .module-card-tag {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .module-card-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.35;
+      margin-bottom: 18px;
+      transition: color 0.15s ease;
+    }
+
+    .module-card-footer {
+      border-top: 1px solid #F3F4F6;
+      padding-top: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .module-progress-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .module-progress-label {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-subtle);
+    }
+
+    .module-progress-val {
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .module-progress-val.done {
+      color: var(--success);
+    }
+
+    .module-progress-val.pending {
+      color: #4B5563;
+    }
+
+    .arrow-circle {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #F9F9FB;
+      color: #9CA3AF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    /* Activity & Actions Page */
+    .activity-header {
+      margin-bottom: 24px;
+      padding: 0 4px;
+    }
+
+    .activity-header-top {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+
+    @media (min-width: 640px) {
+      .activity-header-top {
+        flex-direction: row;
+        align-items: flex-end;
+        justify-content: space-between;
+      }
+    }
+
+    .activity-page-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.2;
+    }
+
+    .activity-index-badge {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .activity-module-subtitle {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .editorial-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      display: flex;
+      flex-direction: column;
+      min-height: 480px;
+    }
+
+    .card-legend {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--primary);
+      margin-bottom: 26px;
+      display: block;
+    }
+
+    .form-group {
+      margin-bottom: 22px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group:last-of-type {
+      margin-bottom: 0;
+    }
+
+    .form-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .response-textarea {
+      width: 100%;
+      min-height: 105px;
+      padding: 12px 14px;
+      background: #F9F9FB;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 14px;
+      color: var(--text);
+      line-height: 1.6;
+      resize: vertical;
+      outline: none;
+      transition: all 0.15s ease;
+    }
+
+    .response-textarea:focus {
+      background: #FFFFFF;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(129, 4, 100, 0.08);
+    }
+
+    .response-textarea::placeholder {
+      color: #9CA3AF;
+    }
+
+    .save-status-container {
+      margin-top: 24px;
+      padding-top: 14px;
+      border-top: 1px solid #F3F4F6;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    .save-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .save-indicator.saving {
+      color: var(--warning);
+    }
+
+    .save-indicator.saved {
+      color: var(--success);
+    }
+
+    .status-pulse-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+    }
+
+    .save-indicator.saving .status-pulse-dot {
+      background: var(--warning);
+      animation: pulse 1s infinite;
+    }
+
+    .save-indicator.saved .status-pulse-dot {
+      background: var(--success);
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+
+    /* Action buttons in footer */
+    .activity-footer-nav {
+      margin-top: 26px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .btn-secondary {
+      padding: 10px 18px;
+      background: #E5E7EB;
+      color: #374151;
+      border: none;
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .btn-secondary:hover {
+      background: #D1D5DB;
+    }
+
+    .btn-outline-primary {
+      padding: 10px 18px;
+      background: transparent;
+      color: var(--primary);
+      border: 1px solid var(--primary);
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .btn-outline-primary:hover {
+      background: var(--primary-light);
+    }
+
+    .btn-next-primary {
+      padding: 10px 20px;
+      background: var(--primary);
+      color: #FFFFFF;
+      border: none;
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      box-shadow: 0 1px 3px rgba(129, 4, 100, 0.2);
+    }
+
+    .btn-next-primary:hover {
+      background: var(--primary-hover);
+    }
+
+    /* App footer */
+    .app-page-footer {
+      padding: 32px 20px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      margin-top: auto;
+    }
+
+    .app-page-footer p {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-subtle);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-layout">
+    <!-- Backdrop for mobile sidebar -->
+    <div id="sidebarBackdrop" class="sidebar-backdrop" onclick="toggleSidebar(false)"></div>
+
+    <!-- Sidebar Navigation -->
+    <aside id="sidebar" class="sidebar">
+      <div class="sidebar-header" onclick="navigate('home')">
+        <div class="cci-logo-badge" style="transform: scale(0.88); transform-origin: left center;">
+          <div class="cci-logo-icon">
+            <div class="ring-outer"></div>
+            <div class="ring-accent"></div>
+            <div class="ring-inner"></div>
+            <div class="center-dot"></div>
+          </div>
+          <div class="cci-logo-text">
+            <span>Chambre de Commerce</span>
+            <span>Et d'Industrie</span>
+          </div>
+        </div>
+        <div class="app-badge">Mon Livret Réflexif CCE</div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <button id="navHomeBtn" class="nav-btn" onclick="navigate('home')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="7" height="9" x="3" y="3" rx="1"/>
+            <rect width="7" height="5" x="14" y="3" rx="1"/>
+            <rect width="7" height="9" x="14" y="12" rx="1"/>
+            <rect width="7" height="5" x="3" y="16" rx="1"/>
+          </svg>
+          Accueil
+        </button>
+
+        <div id="modulesNavList"></div>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button id="finalActionNavBtn" class="final-action-btn" onclick="navigate('actions_mener')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 19l7-7 3 3-7 7-3-3z"/>
+            <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/>
+            <path d="M2 2l7.586 7.586"/>
+            <circle cx="11" cy="11" r="2"/>
+          </svg>
+          🎯 Mes actions à mener
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-wrapper">
+      <!-- Sticky Top Navbar -->
+      <header class="top-navbar">
+        <div class="navbar-left">
+          <button class="menu-toggle-btn" aria-label="Menu" onclick="toggleSidebar(true)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="4" x2="20" y1="12" y2="12"/>
+              <line x1="4" x2="20" y1="6" y2="6"/>
+              <line x1="4" x2="20" y1="18" y2="18"/>
+            </svg>
+          </button>
+          
+          <nav class="breadcrumbs">
+            <button onclick="navigate('home')">Accueil</button>
+            <span id="breadcrumbSeparator" class="separator" style="display: none;">/</span>
+            <span id="breadcrumbCurrent" class="current" style="display: none;"></span>
+          </nav>
+        </div>
+
+        <div class="navbar-right">
+          <!-- Bouton Plein Écran -->
+          <button id="fullscreenBtn" class="fullscreen-btn" onclick="toggleFullscreen()" title="Basculer en plein écran">
+            <svg id="fullscreenIconExpand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+            </svg>
+            <svg id="fullscreenIconCompress" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+              <path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/>
+            </svg>
+            <span id="fullscreenText">Plein écran</span>
+          </button>
+
+          <!-- Overall Progress -->
+          <div class="progress-pill-wrapper">
+            <div class="progress-track">
+              <div id="overallProgressFill" class="progress-fill"></div>
+            </div>
+            <span id="overallProgressText" class="progress-text">0% complété</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- View Container -->
+      <main class="page-container">
+        <!-- HOME VIEW -->
+        <div id="viewHome" style="display: none;">
+          <header class="home-header">
+            <div class="cci-logo-badge">
+              <div class="cci-logo-icon">
+                <div class="ring-outer"></div>
+                <div class="ring-accent"></div>
+                <div class="ring-inner"></div>
+                <div class="center-dot"></div>
+              </div>
+              <div class="cci-logo-text">
+                <span>Chambre de Commerce</span>
+                <span>Et d'Industrie</span>
+              </div>
+            </div>
+
+            <h1 class="home-title">Mon Livret Réflexif</h1>
+            <p class="home-subtitle">CCE - Exercer la mission de formateur en entreprise</p>
+            <div class="home-divider"></div>
+
+            <div style="padding-top: 8px;">
+              <button class="btn-export-primary" onclick="exportWord()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
+                  <polyline points="14 2 14 8 20 8"/>
+                  <line x1="16" x2="8" y1="13" y2="13"/>
+                  <line x1="16" x2="8" y1="17" y2="17"/>
+                  <line x1="10" x2="8" y1="9" y2="9"/>
+                </svg>
+                Télécharger mon livret complet (Word)
+              </button>
+            </div>
+
+            <p class="home-intro-text">
+              Ce livret est votre compagnon de route. Consignez-y vos réflexions après chaque activité pour ancrer vos apprentissages et préparer votre certification.
+            </p>
+          </header>
+
+          <!-- Encadré Réflexivité -->
+          <section class="reflexivity-box">
+            <h2>La réflexivité : un levier essentiel pour votre développement professionnel</h2>
+            <p>
+              La réflexivité en formation consiste à porter un regard conscient et structuré sur votre propre expérience : ce que vous faites, comment vous le faites, et surtout pourquoi vous agissez ainsi. Elle ne se résume pas à raconter ce qui s'est passé, mais à analyser vos pratiques pour en tirer des apprentissages durables.
+            </p>
+            <p>
+              En tant que formateur, cette posture est particulièrement précieuse : elle vous permet de mieux comprendre vos forces, d'identifier vos axes de progrès, et d'ajuster votre manière de concevoir et animer au fil des situations rencontrées.
+            </p>
+            <p>
+              Ce livret réflexif que vous allez compléter tout au long de cette formation est un espace qui vous appartient — un outil pour donner du sens à vos apprentissages, faire le lien entre les apports théoriques et votre réalité professionnelle, et construire progressivement votre propre pratique de formateur.
+            </p>
+            <p>
+              Prendre le temps d'écrire, c'est prendre le temps de penser. Et penser sa pratique, c'est déjà commencer à la transformer.
+            </p>
+          </section>
+
+          <!-- Modules Grid -->
+          <div id="homeModulesGrid" class="modules-grid"></div>
+        </div>
+
+        <!-- ACTIVITY VIEW -->
+        <div id="viewActivity" style="display: none;">
+          <header class="activity-header">
+            <div class="activity-header-top">
+              <h1 id="activityTitle" class="activity-page-title">Titre de l'activité</h1>
+              <div id="activityCounter" class="activity-index-badge">Activité 1 sur 13</div>
+            </div>
+            <p id="activityModuleSubtitle" class="activity-module-subtitle">Module 1 : Titre du module</p>
+          </header>
+
+          <div class="editorial-card">
+            <span class="card-legend">Mes réflexions</span>
+
+            <div class="form-group">
+              <label class="form-label">1. Qu'est-ce que je retiens de cette activité ?</label>
+              <textarea id="actInput1" class="response-textarea" rows="4" placeholder="Saisissez vos réflexions..." oninput="handleActivityInput('question1', this.value)"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">2. Quelles questions me suis-je posé pendant cette activité ?</label>
+              <textarea id="actInput2" class="response-textarea" rows="4" placeholder="Saisissez vos réflexions..." oninput="handleActivityInput('question2', this.value)"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">3. Quelle est la première chose concrète que je vais faire différemment ?</label>
+              <textarea id="actInput3" class="response-textarea" rows="4" placeholder="Saisissez vos réflexions..." oninput="handleActivityInput('question3', this.value)"></textarea>
+            </div>
+
+            <div class="save-status-container">
+              <div id="actSaveIndicator" class="save-indicator saved" style="display: none;">
+                <span class="status-pulse-dot"></span>
+                <span id="actSaveText">Sauvegardé</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="activity-footer-nav">
+            <button class="btn-secondary" onclick="prevActivity()">PRÉCÉDENT</button>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+              <button class="btn-outline-primary" onclick="exportWordCurrentActivity()">WORD ACTUEL</button>
+              <button class="btn-next-primary" onclick="nextActivity()">ACTIVITÉ SUIVANTE</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ACTIONS FINALES VIEW -->
+        <div id="viewActions" style="display: none;">
+          <header class="activity-header">
+            <div class="activity-header-top">
+              <h1 class="activity-page-title">Mes actions à mettre en œuvre</h1>
+              <div class="activity-index-badge">Clôture du parcours</div>
+            </div>
+            <p class="activity-module-subtitle">Plan d'action de fin de formation</p>
+          </header>
+
+          <div class="editorial-card">
+            <span class="card-legend">🎯 Mes actions finales</span>
+
+            <div class="form-group">
+              <label class="form-label">Action 1</label>
+              <textarea id="actionInput1" class="response-textarea" rows="4" placeholder="Ex: Mettre en place un ice-breaker spécifique lors de ma prochaine session..." oninput="handleActionsInput('question1', this.value)"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Action 2</label>
+              <textarea id="actionInput2" class="response-textarea" rows="4" placeholder="Ex: Utiliser l'IAG pour générer des études de cas personnalisées..." oninput="handleActionsInput('question2', this.value)"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Action 3</label>
+              <textarea id="actionInput3" class="response-textarea" rows="4" placeholder="Ex: Revoir mes outils d'évaluation à froid..." oninput="handleActionsInput('question3', this.value)"></textarea>
+            </div>
+
+            <div class="save-status-container">
+              <div id="actionSaveIndicator" class="save-indicator saved" style="display: none;">
+                <span class="status-pulse-dot"></span>
+                <span id="actionSaveText">Sauvegardé</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="activity-footer-nav">
+            <button class="btn-secondary" onclick="navigate('home')">RETOUR ACCUEIL</button>
+            <div style="display: flex; gap: 10px;">
+              <button class="btn-outline-primary" onclick="exportWordCurrentActivity()">WORD ACTUEL</button>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- Footer -->
+      <footer class="app-page-footer">
+        <p>© 2026 Mon Livret Réflexif CCE — CCI FRANCE</p>
+      </footer>
+    </div>
+  </div>
+
+  <script>
+    /* ==========================================================================
+       DONNÉES DU PARCOURS
+       ========================================================================== */
+    const MODULES = [
+      {
+        id: 1,
+        title: "1. Analyser une demande de formation",
+        activities: [
+          { id: 'analyse_demande_checklist', title: "La checklist : QQOQCCP" },
+          { id: 'analyse_demande_qqoqccp', title: "L'analyse QQOQCCP" },
+          { id: 'analyse_demande_persona', title: "Construire un persona" }
+        ]
+      },
+      {
+        id: 2,
+        title: "2. Concevoir une formation",
+        activities: [
+          { id: 'formuler_objectifs', title: "Formuler des objectifs pédagogiques" },
+          { id: 'fiche_formation', title: "Compléter une fiche formation" },
+          { id: 'construire_deroule', title: "Construire un résumé de déroulé pédagogique" }
+        ]
+      },
+      {
+        id: 3,
+        title: "3. Appliquer l'IAG au service de la formation",
+        activities: [
+          { id: 'rediger_prompt', title: "Rédiger un prompt" }
+        ]
+      },
+      {
+        id: 4,
+        title: "4. Concevoir des supports pédagogiques",
+        activities: [
+          { id: 'support_iag', title: "Construire un support à l'aide de l'IAG" }
+        ]
+      },
+      {
+        id: 5,
+        title: "5. Organiser les conditions logistiques",
+        activities: [
+          { id: 'checklist_presession', title: "Construire sa checklist pré-session" }
+        ]
+      },
+      {
+        id: 6,
+        title: "6. Animer une séquence de formation",
+        activities: [
+          { id: 'micro_sequence_video', title: "Préparer une micro-séquence vidéo" }
+        ]
+      },
+      {
+        id: 7,
+        title: "7. Evaluer les acquis des apprenants",
+        activities: [
+          { id: 'evaluation_diagnostique', title: "Concevoir une évaluation diagnostique" }
+        ]
+      },
+      {
+        id: 8,
+        title: "8. Evaluer la formation",
+        activities: [
+          { id: 'questionnaire_chaud', title: "Rédiger un questionnaire à chaud" },
+          { id: 'partie_bilan', title: "Rédiger une partie d'un bilan" }
+        ]
+      }
+    ];
+
+    const ALL_ACTIVITIES = MODULES.flatMap(m => m.activities.map(a => ({ ...a, moduleId: m.id, moduleTitle: m.title })));
+    const FINAL_ACTION_ID = 'actions_mener';
+
+    const STORAGE_KEY = 'livret_reflexif_v1';
+
+    /* ==========================================================================
+       ÉTAT DE L'APPLICATION
+       ========================================================================== */
+    let appState = {
+      lastVisited: 'home',
+      activities: {}
+    };
+
+    let currentView = 'home';
+    let saveTimeout = null;
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          appState = JSON.parse(raw);
+          if (!appState.activities) appState.activities = {};
+        }
+      } catch (e) {
+        console.warn('Erreur lors du chargement de l’état local', e);
+      }
+    }
+
+    function saveState() {
+      try {
+        appState.lastVisited = currentView;
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+      } catch (e) {
+        console.error('Erreur de sauvegarde locale', e);
+      }
+    }
+
+    function getActivityData(id) {
+      if (!appState.activities[id]) {
+        appState.activities[id] = { question1: '', question2: '', question3: '', lastSaved: '' };
+      }
+      return appState.activities[id];
+    }
+
+    function isActivityComplete(id) {
+      const data = appState.activities[id];
+      return !!(data && (data.question1 || data.question2 || data.question3));
+    }
+
+    /* ==========================================================================
+       PLEIN ÉCRAN
+       ========================================================================== */
+    function isFullscreen() {
+      return !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement);
+    }
+
+    function toggleFullscreen() {
+      if (!isFullscreen()) {
+        const docEl = document.documentElement;
+        if (docEl.requestFullscreen) {
+          docEl.requestFullscreen().catch(() => {});
+        } else if (docEl.webkitRequestFullscreen) {
+          docEl.webkitRequestFullscreen();
+        } else if (docEl.mozRequestFullScreen) {
+          docEl.mozRequestFullScreen();
+        } else if (docEl.msRequestFullscreen) {
+          docEl.msRequestFullscreen();
+        }
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen().catch(() => {});
+        } else if (document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+          document.mozCancelFullScreen();
+        } else if (document.msExitFullscreen) {
+          document.msExitFullscreen();
+        }
+      }
+    }
+
+    function updateFullscreenUI() {
+      const active = isFullscreen();
+      const iconExpand = document.getElementById('fullscreenIconExpand');
+      const iconCompress = document.getElementById('fullscreenIconCompress');
+      const label = document.getElementById('fullscreenText');
+      if (active) {
+        iconExpand.style.display = 'none';
+        iconCompress.style.display = 'block';
+        label.textContent = 'Quitter plein écran';
+      } else {
+        iconExpand.style.display = 'block';
+        iconCompress.style.display = 'none';
+        label.textContent = 'Plein écran';
+      }
+    }
+
+    ['fullscreenchange', 'webkitfullscreenchange', 'mozfullscreenchange', 'MSFullscreenChange'].forEach(evt => {
+      document.addEventListener(evt, updateFullscreenUI);
+    });
+
+    /* ==========================================================================
+       SIDEBAR & NAVIGATION
+       ========================================================================== */
+    function toggleSidebar(open) {
+      const sidebar = document.getElementById('sidebar');
+      const backdrop = document.getElementById('sidebarBackdrop');
+      if (open) {
+        sidebar.classList.add('open');
+        backdrop.classList.add('active');
+      } else {
+        sidebar.classList.remove('open');
+        backdrop.classList.remove('active');
+      }
+    }
+
+    function renderSidebar() {
+      const container = document.getElementById('modulesNavList');
+      container.innerHTML = '';
+
+      MODULES.forEach(module => {
+        const item = document.createElement('div');
+        item.className = 'module-item';
+
+        const completedCount = module.activities.filter(a => isActivityComplete(a.id)).length;
+
+        const titleBar = document.createElement('div');
+        titleBar.className = 'module-title-bar';
+        titleBar.innerHTML = `
+          <span>Module ${module.id}</span>
+          <span class="count-badge">${completedCount}/${module.activities.length}</span>
+        `;
+        item.appendChild(titleBar);
+
+        module.activities.forEach(act => {
+          const btn = document.createElement('button');
+          btn.className = 'activity-btn' + (currentView === act.id ? ' active' : '');
+          btn.onclick = () => navigate(act.id);
+
+          const isDone = isActivityComplete(act.id);
+          const iconHtml = isDone
+            ? `<svg class="status-icon" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`
+            : `<span class="status-dot-pending"></span>`;
+
+          btn.innerHTML = `
+            <span class="status-icon">${iconHtml}</span>
+            <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${escapeHtml(act.title)}</span>
+          `;
+          item.appendChild(btn);
+        });
+
+        container.appendChild(item);
+      });
+
+      // Update home button & final action button active states
+      const homeBtn = document.getElementById('navHomeBtn');
+      if (currentView === 'home') {
+        homeBtn.classList.add('active');
+      } else {
+        homeBtn.classList.remove('active');
+      }
+
+      const finalBtn = document.getElementById('finalActionNavBtn');
+      if (currentView === FINAL_ACTION_ID) {
+        finalBtn.classList.add('active');
+      } else {
+        finalBtn.classList.remove('active');
+      }
+    }
+
+    function updateProgressIndicators() {
+      const completed = ALL_ACTIVITIES.filter(a => isActivityComplete(a.id)).length;
+      const total = ALL_ACTIVITIES.length;
+      const pct = Math.round((completed / total) * 100);
+
+      document.getElementById('overallProgressFill').style.width = pct + '%';
+      document.getElementById('overallProgressText').textContent = `${pct}% complété`;
+    }
+
+    function navigate(viewId) {
+      currentView = viewId;
+      saveState();
+      toggleSidebar(false);
+      window.scrollTo(0, 0);
+
+      // Hide all views
+      document.getElementById('viewHome').style.display = 'none';
+      document.getElementById('viewActivity').style.display = 'none';
+      document.getElementById('viewActions').style.display = 'none';
+
+      // Breadcrumbs
+      const sep = document.getElementById('breadcrumbSeparator');
+      const cur = document.getElementById('breadcrumbCurrent');
+
+      if (viewId === 'home') {
+        document.getElementById('viewHome').style.display = 'block';
+        sep.style.display = 'none';
+        cur.style.display = 'none';
+        renderHomeModules();
+      } else if (viewId === FINAL_ACTION_ID) {
+        document.getElementById('viewActions').style.display = 'block';
+        sep.style.display = 'inline';
+        cur.style.display = 'inline';
+        cur.textContent = 'Mes actions à mener';
+        setupActionsPage();
+      } else {
+        document.getElementById('viewActivity').style.display = 'block';
+        const act = ALL_ACTIVITIES.find(a => a.id === viewId);
+        sep.style.display = 'inline';
+        cur.style.display = 'inline';
+        cur.textContent = act ? act.title : '';
+        setupActivityPage(viewId);
+      }
+
+      renderSidebar();
+      updateProgressIndicators();
+    }
+
+    /* ==========================================================================
+       VUE ACCUEIL
+       ========================================================================== */
+    function renderHomeModules() {
+      const grid = document.getElementById('homeModulesGrid');
+      grid.innerHTML = '';
+
+      MODULES.forEach(module => {
+        const total = module.activities.length;
+        const completed = module.activities.filter(a => isActivityComplete(a.id)).length;
+        const isDone = completed === total && total > 0;
+
+        const card = document.createElement('div');
+        card.className = 'module-card';
+        card.onclick = () => navigate(module.activities[0].id);
+
+        const checkIcon = isDone 
+          ? `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`
+          : ``;
+
+        card.innerHTML = `
+          <div>
+            <div class="module-card-header">
+              <span class="module-card-tag">Module ${module.id}</span>
+              ${checkIcon}
+            </div>
+            <h3 class="module-card-title">${escapeHtml(module.title)}</h3>
+          </div>
+          <div class="module-card-footer">
+            <div class="module-progress-info">
+              <span class="module-progress-label">Activités</span>
+              <span class="module-progress-val ${isDone ? 'done' : 'pending'}">
+                ${completed} / ${total} ${isDone ? 'Complétées' : 'en cours'}
+              </span>
+            </div>
+            <div class="arrow-circle">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6"/>
+              </svg>
+            </div>
+          </div>
+        `;
+
+        grid.appendChild(card);
+      });
+    }
+
+    /* ==========================================================================
+       VUE ACTIVITÉ
+       ========================================================================== */
+    function setupActivityPage(activityId) {
+      const act = ALL_ACTIVITIES.find(a => a.id === activityId);
+      const actIndex = ALL_ACTIVITIES.findIndex(a => a.id === activityId);
+      if (!act) return;
+
+      document.getElementById('activityTitle').textContent = act.title;
+      document.getElementById('activityCounter').textContent = `Activité ${actIndex + 1} sur ${ALL_ACTIVITIES.length}`;
+      document.getElementById('activityModuleSubtitle').textContent = `Module ${act.moduleId} : ${act.moduleTitle}`;
+
+      const data = getActivityData(activityId);
+      document.getElementById('actInput1').value = data.question1 || '';
+      document.getElementById('actInput2').value = data.question2 || '';
+      document.getElementById('actInput3').value = data.question3 || '';
+
+      updateSaveIndicator('act', data.lastSaved);
+    }
+
+    function handleActivityInput(field, value) {
+      const data = getActivityData(currentView);
+      data[field] = value;
+      data.lastSaved = new Date().toISOString();
+
+      showSavingState('act');
+
+      if (saveTimeout) clearTimeout(saveTimeout);
+      saveTimeout = setTimeout(() => {
+        saveState();
+        updateSaveIndicator('act', data.lastSaved);
+        renderSidebar();
+        updateProgressIndicators();
+      }, 700);
+    }
+
+    function prevActivity() {
+      const actIndex = ALL_ACTIVITIES.findIndex(a => a.id === currentView);
+      if (actIndex > 0) {
+        navigate(ALL_ACTIVITIES[actIndex - 1].id);
+      } else {
+        navigate('home');
+      }
+    }
+
+    function nextActivity() {
+      const actIndex = ALL_ACTIVITIES.findIndex(a => a.id === currentView);
+      if (actIndex < ALL_ACTIVITIES.length - 1) {
+        navigate(ALL_ACTIVITIES[actIndex + 1].id);
+      } else {
+        navigate(FINAL_ACTION_ID);
+      }
+    }
+
+    /* ==========================================================================
+       VUE ACTIONS FINALES
+       ========================================================================== */
+    function setupActionsPage() {
+      const data = getActivityData(FINAL_ACTION_ID);
+      document.getElementById('actionInput1').value = data.question1 || '';
+      document.getElementById('actionInput2').value = data.question2 || '';
+      document.getElementById('actionInput3').value = data.question3 || '';
+
+      updateSaveIndicator('action', data.lastSaved);
+    }
+
+    function handleActionsInput(field, value) {
+      const data = getActivityData(FINAL_ACTION_ID);
+      data[field] = value;
+      data.lastSaved = new Date().toISOString();
+
+      showSavingState('action');
+
+      if (saveTimeout) clearTimeout(saveTimeout);
+      saveTimeout = setTimeout(() => {
+        saveState();
+        updateSaveIndicator('action', data.lastSaved);
+      }, 700);
+    }
+
+    /* ==========================================================================
+       INDICATEUR DE SAUVEGARDE
+       ========================================================================== */
+    function showSavingState(prefix) {
+      const ind = document.getElementById(prefix + 'SaveIndicator');
+      const txt = document.getElementById(prefix + 'SaveText');
+      ind.style.display = 'inline-flex';
+      ind.className = 'save-indicator saving';
+      txt.textContent = 'Sauvegarde...';
+    }
+
+    function updateSaveIndicator(prefix, isoDate) {
+      const ind = document.getElementById(prefix + 'SaveIndicator');
+      const txt = document.getElementById(prefix + 'SaveText');
+      if (!isoDate) {
+        ind.style.display = 'none';
+        return;
+      }
+      ind.style.display = 'inline-flex';
+      ind.className = 'save-indicator saved';
+      const timeStr = new Date(isoDate).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+      txt.textContent = `Sauvegardé à ${timeStr}`;
+    }
+
+    /* ==========================================================================
+       EXPORT WORD (.DOCX / .DOC COMPATIBLE MS WORD)
+       - Police: Fira Sans partout
+       - Corps du texte: 12pt
+       - Titres & sous-titres hiérarchisés
+       - Logo CCI en haut à droite
+       ========================================================================== */
+    async function exportWord(targetActivityId) {
+      const dateStr = new Date().toLocaleDateString('fr-FR').replace(/\//g, '-');
+      const filename = `Livret_Reflexif_${targetActivityId || 'complet'}_${dateStr}.docx`;
+
+      // Détermine les activités à exporter
+      const allExportItems = [...ALL_ACTIVITIES, { id: FINAL_ACTION_ID, title: 'Mes actions à mener' }];
+      const itemsToExport = targetActivityId
+        ? allExportItems.filter(a => a.id === targetActivityId)
+        : allExportItems.filter(a => {
+            const d = appState.activities[a.id];
+            return d && (d.question1 || d.question2 || d.question3);
+          });
+
+      // Tentative via docx (window.docx)
+      if (window.docx && window.docx.Document && window.docx.Packer) {
+        try {
+          await generateDocxBlob(itemsToExport, targetActivityId, filename);
+          return;
+        } catch (e) {
+          console.warn("Échec génération docx via bibliothèque, passage au mode compatible Word natif", e);
+        }
+      }
+
+      // Mode autonome compatible Word direct (HTML-based Word Document)
+      generateHtmlWordDoc(itemsToExport, targetActivityId, filename.replace('.docx', '.doc'));
+    }
+
+    function exportWordCurrentActivity() {
+      exportWord(currentView);
+    }
+
+    async function generateDocxBlob(itemsToExport, targetActivityId, filename) {
+      const { Document, Packer, Paragraph, TextRun, AlignmentType, HeadingLevel, ImageRun } = window.docx;
+      const FONT_NAME = "Fira Sans";
+      const BODY_SIZE = 24; // 12pt (docx uses half-points: 24 = 12pt)
+      const H1_SIZE = 48;   // 24pt
+      const H2_SIZE = 36;   // 18pt
+      const H3_SIZE = 28;   // 14pt
+
+      let logoData = null;
+      try {
+        const resp = await fetch("https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Logo_CCI_France_-_2012.svg/300px-Logo_CCI_France_-_2012.svg.png");
+        if (resp.ok) {
+          logoData = await resp.arrayBuffer();
+        }
+      } catch (e) {
+        console.warn("Logo CCI non accessible pour l'export Word", e);
+      }
+
+      const headerChildren = [];
+      if (logoData) {
+        headerChildren.push(
+          new Paragraph({
+            alignment: AlignmentType.RIGHT,
+            children: [
+              new ImageRun({
+                data: logoData,
+                transformation: { width: 120, height: 48 },
+              }),
+            ],
+          })
+        );
+      }
+
+      headerChildren.push(
+        new Paragraph({
+          alignment: AlignmentType.CENTER,
+          children: [
+            new TextRun({
+              text: "Mon Livret Réflexif CCE",
+              bold: true,
+              size: H1_SIZE,
+              color: "810464",
+              font: FONT_NAME,
+            }),
+          ],
+        }),
+        new Paragraph({
+          alignment: AlignmentType.CENTER,
+          children: [
+            new TextRun({
+              text: "CCE - Exercer la mission de formateur en entreprise",
+              size: H3_SIZE,
+              font: FONT_NAME,
+            }),
+          ],
+        }),
+        new Paragraph({
+          alignment: AlignmentType.CENTER,
+          children: [
+            new TextRun({
+              text: `Date d'export : ${new Date().toLocaleDateString('fr-FR')}`,
+              size: BODY_SIZE,
+              font: FONT_NAME,
+            }),
+          ],
+        }),
+        new Paragraph({ text: "" }),
+        new Paragraph({ text: "" })
+      );
+
+      const contentChildren = [];
+
+      itemsToExport.forEach(activity => {
+        const data = appState.activities[activity.id] || { question1: '', question2: '', question3: '' };
+
+        contentChildren.push(
+          new Paragraph({
+            heading: HeadingLevel.HEADING_2,
+            children: [
+              new TextRun({
+                text: activity.title,
+                bold: true,
+                color: "810464",
+                size: H2_SIZE,
+                font: FONT_NAME,
+              }),
+            ],
+          })
+        );
+
+        const questions = activity.id === FINAL_ACTION_ID
+          ? ["Action 1", "Action 2", "Action 3"]
+          : [
+              "1. Qu'est-ce que je retiens de cette activité ?",
+              "2. Quelles questions me suis-je posé pendant cette activité ?",
+              "3. Quelle est la première chose concrète que je vais faire différemment ?"
+            ];
+
+        [data.question1, data.question2, data.question3].forEach((answer, idx) => {
+          contentChildren.push(
+            new Paragraph({
+              children: [
+                new TextRun({
+                  text: questions[idx],
+                  bold: true,
+                  color: "810464",
+                  size: BODY_SIZE,
+                  font: FONT_NAME,
+                }),
+              ],
+            }),
+            new Paragraph({
+              children: [
+                new TextRun({
+                  text: answer || "(Non renseigné)",
+                  size: BODY_SIZE,
+                  font: FONT_NAME,
+                }),
+              ],
+            }),
+            new Paragraph({ text: "" })
+          );
+        });
+
+        contentChildren.push(
+          new Paragraph({ text: "--------------------------------------------------------" }),
+          new Paragraph({ text: "" })
+        );
+      });
+
+      const doc = new Document({
+        styles: {
+          default: {
+            document: {
+              run: {
+                font: FONT_NAME,
+                size: BODY_SIZE,
+              },
+            },
+          },
+        },
+        sections: [
+          {
+            properties: {},
+            children: [...headerChildren, ...contentChildren],
+          },
+        ],
+      });
+
+      const blob = await Packer.toBlob(doc);
+      triggerDownload(blob, filename);
+    }
+
+    function generateHtmlWordDoc(itemsToExport, targetActivityId, filename) {
+      let contentHtml = '';
+
+      itemsToExport.forEach(activity => {
+        const data = appState.activities[activity.id] || { question1: '', question2: '', question3: '' };
+        const questions = activity.id === FINAL_ACTION_ID
+          ? ["Action 1", "Action 2", "Action 3"]
+          : [
+              "1. Qu'est-ce que je retiens de cette activité ?",
+              "2. Quelles questions me suis-je posé pendant cette activité ?",
+              "3. Quelle est la première chose concrète que je vais faire différemment ?"
+            ];
+
+        contentHtml += `
+          <div style="margin-bottom: 30pt; page-break-inside: avoid;">
+            <h2 style="font-family: 'Fira Sans', Arial, sans-serif; font-size: 16pt; color: #810464; border-bottom: 2pt solid #810464; padding-bottom: 4pt; margin-top: 18pt;">
+              ${escapeHtml(activity.title)}
+            </h2>
+            <div style="margin-top: 10pt;">
+              <p style="font-weight: bold; color: #810464; margin-bottom: 4pt; font-size: 12pt;">${escapeHtml(questions[0])}</p>
+              <p style="background: #F9F9FB; border: 1pt solid #E5E7EB; padding: 10pt; font-size: 12pt; line-height: 1.5; color: #1A1A2E;">
+                ${escapeHtml(data.question1 || '(Non renseigné)')}
+              </p>
+            </div>
+            <div style="margin-top: 10pt;">
+              <p style="font-weight: bold; color: #810464; margin-bottom: 4pt; font-size: 12pt;">${escapeHtml(questions[1])}</p>
+              <p style="background: #F9F9FB; border: 1pt solid #E5E7EB; padding: 10pt; font-size: 12pt; line-height: 1.5; color: #1A1A2E;">
+                ${escapeHtml(data.question2 || '(Non renseigné)')}
+              </p>
+            </div>
+            <div style="margin-top: 10pt;">
+              <p style="font-weight: bold; color: #810464; margin-bottom: 4pt; font-size: 12pt;">${escapeHtml(questions[2])}</p>
+              <p style="background: #F9F9FB; border: 1pt solid #E5E7EB; padding: 10pt; font-size: 12pt; line-height: 1.5; color: #1A1A2E;">
+                ${escapeHtml(data.question3 || '(Non renseigné)')}
+              </p>
+            </div>
+          </div>
+        `;
+      });
+
+      const fullHtml = `
+        <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+        <head>
+          <meta charset="utf-8">
+          <title>Mon Livret Réflexif CCE</title>
+          <!--[if gte mso 9]>
+          <xml>
+            <w:WordDocument>
+              <w:View>Print</w:View>
+              <w:Zoom>100</w:Zoom>
+              <w:DoNotOptimizeForBrowser/>
+            </w:WordDocument>
+          </xml>
+          <![endif]-->
+          <style>
+            @page {
+              size: 21cm 29.7cm;
+              margin: 2.5cm 2cm 2.5cm 2cm;
+              mso-page-orientation: portrait;
+            }
+            body {
+              font-family: 'Fira Sans', Calibri, Arial, sans-serif;
+              font-size: 12pt;
+              line-height: 1.5;
+              color: #1A1A2E;
+            }
+            h1 { font-family: 'Fira Sans', Arial, sans-serif; font-size: 24pt; color: #810464; }
+            h2 { font-family: 'Fira Sans', Arial, sans-serif; font-size: 16pt; color: #810464; }
+            p { font-family: 'Fira Sans', Arial, sans-serif; font-size: 12pt; }
+          </style>
+        </head>
+        <body>
+          <div style="text-align: right; margin-bottom: 15pt;">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Logo_CCI_France_-_2012.svg/300px-Logo_CCI_France_-_2012.svg.png" width="140" alt="CCI France" />
+          </div>
+          <div style="text-align: center; margin-bottom: 25pt;">
+            <h1 style="margin: 0; color: #810464; font-size: 24pt;">Mon Livret Réflexif CCE</h1>
+            <p style="font-size: 14pt; color: #4B5563; margin-top: 6pt;">CCE - Exercer la mission de formateur en entreprise</p>
+            <p style="font-size: 11pt; color: #6B7280; margin-top: 4pt;">Exporté le ${new Date().toLocaleDateString('fr-FR')}</p>
+          </div>
+          <hr style="border: none; border-top: 1.5pt solid #810464; margin-bottom: 25pt;" />
+          ${contentHtml}
+        </body>
+        </html>
+      `;
+
+      const blob = new Blob(['\ufeff', fullHtml], { type: 'application/msword;charset=utf-8' });
+      triggerDownload(blob, filename);
+    }
+
+    function triggerDownload(blob, filename) {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;')
+        .replace(/\n/g, '<br/>');
+    }
+
+    /* ==========================================================================
+       INITIALISATION
+       ========================================================================== */
+    window.addEventListener('DOMContentLoaded', () => {
+      loadState();
+      navigate(appState.lastVisited || 'home');
+      updateFullscreenUI();
+    });
+  </script>
+</body>
+</html>

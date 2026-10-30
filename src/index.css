@@ -1,0 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Fira+Sans:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Fira Sans", ui-sans-serif, system-ui, sans-serif;
+  --color-accent: #810464;
+  --color-bg-light: #F9F9FB;
+  --shadow-editorial: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+@layer base {
+  body {
+    @apply bg-bg-light text-[#1A1A2E] font-sans;
+  }
+}
